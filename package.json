@@ -1,10 +1,10 @@
 {
-  "bin": { "jslint-lite": "jslint-lite.js" },
+  "bin": { "proxy": "proxy.js" },
   "contributors": [{ "name": "kai zhu", "email": "kaizhu256@gmail.com" }],
-  "description": "jslint with no external package dependencies",
+  "description": "nodejs proxy server",
 	"license": "MIT",
-  "main": "jslint-lite.js",
-  "name": "jslint-lite",
+  "main": "proxy.js",
+  "name": "proxy",
   "os": ["darwin", "linux"],
   "scripts": {
     "install": "./build.sh shNpmInstall",

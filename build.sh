@@ -122,8 +122,8 @@ shNpmInstall() {
 
 shNpmTest() {
   ## this function runs npm test
-  ## jslint example.js and jslint-lite.js
-  node $MAIN_JS example.js jslint-lite.js
+  # ## jslint example.js and jslint-lite.js
+  # node $MAIN_JS example.js jslint-lite.js
   ## install istanbul
   if [ ! "$(which istanbul)" ]
   then
@@ -184,7 +184,7 @@ shMain() {
     return
   fi
   ## init node $MAIN_JS
-  MAIN_JS=jslint-lite.js
+  MAIN_JS=proxy.js
   ## save current dir to $CWD
   CWD=$(pwd)
   ## init $GITHUB_REPO

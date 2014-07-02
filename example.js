@@ -6,6 +6,6 @@
   /* require fs */
   fs = require('fs');
   /* require jslint_lite */
-  jslint_lite = require('./jslint-lite.js');
+  jslint_lite = require('./proxy.js');
   jslint_lite.jslint(fs.readFileSync('example.js', 'utf8'), 'example.js');
 }());

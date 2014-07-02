@@ -15,7 +15,7 @@
   denyCurrentBranch = warn
 [remote "origin"]
   fetch = +refs/heads/*:refs/remotes/origin/*
-  url = git@github.com:kaizhu256/node-jslint-lite.git
+  url = git@github.com:kaizhu256/node-proxy.git
 /* MODULE_END */
 
 

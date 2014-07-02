@@ -1,14 +1,18 @@
 {
-  "bin": { "proxy": "proxy.js" },
+  "bin": { "proxy-lite": "proxy-lite.js" },
   "contributors": [{ "name": "kai zhu", "email": "kaizhu256@gmail.com" }],
-  "description": "nodejs proxy server",
+  "description": "lightweight nodejs proxy server with no external dependencies",
+  "devDependencies": {
+    "istanbul": "0.2.x",
+    "jslint-lite": "2014.x.x"
+  },
 	"license": "MIT",
-  "main": "proxy.js",
-  "name": "proxy",
+  "main": "proxy-lite.js",
+  "name": "proxy-lite",
   "os": ["darwin", "linux"],
   "scripts": {
     "install": "./build.sh shNpmInstall",
     "test": "./build.sh shNpmTest"
   },
-  "version": "2014.7.1-1"
+  "version": "2014.7.2-1"
 }

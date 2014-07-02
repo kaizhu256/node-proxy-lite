@@ -29,12 +29,15 @@ shAesEncrypt() {
 shAesEncryptTravis() {
   ## this function encrypts the script $1 to $AES_ENCRYPTED_SH and stores it in .travis.yml
   ## init $FILE
-  local FILE=$1
+  local FILE=$1/aes-decrypted.$(echo $GITHUB_REPO | perl -pe "s/\//./").sh
   if [ ! -f "$FILE" ]
   then
     printf "## non-existent file $FILE\n"
     return 1
   fi
+  ## source $FILE
+  printf "## sourcing file $FILE ...\n"
+  . $FILE
   if [ ! "$AES_256_KEY" ]
   then
     printf "## no \$AES_256_KEY detected in env - creating new AES_256_KEY ...\n"
@@ -87,7 +90,7 @@ shBuild() {
   export CI_COMMIT_INFO="$CI_COMMIT_ID - $CI_COMMIT_MESSAGE"
   npm test
   ## create coverage badge
-  node $MAIN_JS --mode-cli=coverageReportBadgeCreate || return $?
+  node build.js --mode-cli=coverageReportBadgeCreate || return $?
   ## upload build
   for DIR in\
     $CI_BUILD_DIR/latest.$CI_BRANCH\
@@ -95,7 +98,7 @@ shBuild() {
   do
     for FILE in $(find .build -type f)
     do
-      node $MAIN_JS --mode-cli=githubContentsFilePush $FILE .build $DIR || return $?
+      node build.js --mode-cli=githubContentsFilePush $FILE .build $DIR || return $?
       ## throttle github file updates
       sleep 1
     done
@@ -109,7 +112,7 @@ shGithubContentsDirPush() {
   local FILE2
   for FILE1 in $(find $DIR1 -type f)
   do
-    node $MAIN_JS --mode-cli=githubContentsFilePush $FILE1 $DIR1 $DIR2 || return $?
+    node build.js --mode-cli=githubContentsFilePush $FILE1 $DIR1 $DIR2 || return $?
     ## throttle github file updates
     sleep 1
   done
@@ -117,24 +120,19 @@ shGithubContentsDirPush() {
 
 shNpmInstall() {
   ## this function runs after npm install
-  node $MAIN_JS --mode-cli=npmInstall || return $?
+  node build.js --mode-cli=npmInstall || return $?
 }
 
 shNpmTest() {
   ## this function runs npm test
-  # ## jslint example.js and jslint-lite.js
-  # node $MAIN_JS example.js jslint-lite.js
-  ## install istanbul
-  if [ ! "$(which istanbul)" ]
-  then
-    npm install istanbul || return $?
-  fi
+  ## jslint build.js and proxy-lite.js
+  jslint-lite build.js proxy-lite.js
   ## run example.js
   node example.js || return $?
   ## remove old coverage report
   rm -fr .build/coverage-report
   ## init $ARGS
-  local ARGS="$MAIN_JS"
+  local ARGS="proxy-lite.js"
   ARGS="$ARGS --dir=.build/coverage-report"
   ARGS="$ARGS --print=detail"
   ARGS="$ARGS --report=html"
@@ -183,8 +181,6 @@ shMain() {
   then
     return
   fi
-  ## init node $MAIN_JS
-  MAIN_JS=proxy.js
   ## save current dir to $CWD
   CWD=$(pwd)
   ## init $GITHUB_REPO

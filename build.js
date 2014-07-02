@@ -1,18 +1,17 @@
-#!/usr/bin/env node
-/*jslint indent:2, node: true, nomen: true, regexp: true, stupid: true*/
-/*global state*/
-/* declare global vars */
-var exports, required;
+/*jslint browser: true, indent:2, node: true, nomen: true, regexp: true, stupid: true*/
+/*global required, state*/
+/* declare module vars */
+var exports;
 
 
 
-(function moduleInitNodejs() {
+(function subModuleBuildShared() {
   /*
-    this nodejs module inits the package
+    this shared sub-module exports the build api
   */
   'use strict';
   var local = {
-    _name: 'proxy.moduleInitNodejs',
+    _name: 'build.subModuleBuildShared',
 
     _init: function () {
       /*
@@ -22,18 +21,10 @@ var exports, required;
       global[['debug', 'Print'].join('')] = local._debug_print;
       /* init exports object */
       exports = module.exports = {};
-      /* init required object */
-      required = {
-        crypto: require('crypto'),
-        fs: require('fs'),
-        http: require('http'),
-        https: require('https'),
-        path: require('path'),
-        url: require('url'),
-        vm: require('vm')
-      };
       /* init state object */
       global.state = global.state || {};
+      /* init nodejs mode */
+      state.modeNodejs = global.process && process.versions && process.versions.node;
       local.setDefault(state, {
         /* default error */
         errorDefault: new Error(),
@@ -41,95 +32,31 @@ var exports, required;
         fileDict: {},
         /* dict of cli commands */
         modeCliDict: {},
+        /* test report object */
         testReport: {
+          /* list of javascript test platforms */
           testPlatformList: [{
-            /* list of tests to run */
+            /* javascript platform name */
+            name: state.modeNodejs ? 'nodejs - ' + process.platform + ' ' + process.version +
+              ' - ' + process.env.MODE_CI_BUILD
+              : 'browser - ' + (global.navigator && navigator.userAgent),
+            /* list of test cases to run */
             testCaseList: []
           }]
         },
+        /* ascii character reference */
+        textExampleAscii: '\x00\x01\x02\x03\x04\x05\x06\x07\b\t\n\x0b\f\r\x0e\x0f'
+          + '\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f'
+          + ' !"#$%&\'()*+,-./0123456789:;<=>?'
+          + '@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_'
+          + '`abcdefghijklmnopqrstuvwxyz{|}~\x7f',
         /* default timeout for http request and other async io */
         timeoutDefault: 30000
       });
       /* init local object */
       local.initLocal(local);
-      /* init cli */
-      local._initCli(process.argv);
-      /* init builtin files */
-      local._initFile();
       /* init state.testReport */
       exports.testReportMerge(state.testReport, {});
-    },
-
-    _initCli: function (argv) {
-      /*
-        this function parses commandline arguments and integrates it into the state dict
-      */
-      var callback, value;
-      /* parse argv */
-      argv.forEach(function (arg) {
-        if (arg.indexOf('--') === 0) {
-          arg = arg.split('=');
-          /* --foo=1 -> state.foo = 1 */
-          value = arg.slice(1).join('=') ||
-            /* --foo -> state.foo = true */
-            true;
-          /* convert arg to camel case */
-          arg = arg[0].slice(2).replace((/[\-_][a-z]/g), function (match) {
-            return match[1].toUpperCase();
-          });
-          try {
-            state[arg] = JSON.parse(value);
-          } catch (error) {
-            state[arg] = value;
-          }
-        }
-      });
-      /* init cli */
-      setTimeout(function () {
-        callback = state.modeCliDict[state.modeCli];
-        if (callback) {
-          callback(argv, exports.onEventErrorDefault);
-        }
-      });
-    },
-
-    __initCli_default_test: function (onEventError) {
-      /*
-        this function tests _initCli's default handling behavior
-      */
-      var data;
-      exports.testMock(onEventError, [
-        [global, { state: { modeCliDict: {} } }]
-      ], function (onEventError) {
-        /* test default handling behavior */
-        local._initCli(['aa', '--bb', '--cc=dd']);
-        data = exports.jsonStringifyOrdered(state);
-        exports.assert(data === '{"bb":true,"cc":"dd","modeCliDict":{}}', data);
-        onEventError();
-      });
-    },
-
-    _initFile: function () {
-      /*
-        this function inits builtin files
-      */
-      var data;
-      data = required.fs.readFileSync('build.data', 'utf8');
-      data.replace(
-        (/^\/\* MODULE_BEGIN (.+) \*\/$([\S\s]+?)^\/\* MODULE_END \*\/$/gm),
-        function (_, options, content, ii) {
-          exports.nop(_);
-          options = JSON.parse(options);
-          /* save options to state.fileDict */
-          state.fileDict[options.file] = options;
-          /* preserve lineno */
-          options.content = data.slice(0, ii).replace(/.*/g, '') + content;
-          /* run actions */
-          options.actionList.forEach(function (action) {
-            state.fileActionDict[action](options);
-          });
-        }
-      );
     },
 
     initLocal: function (local) {
@@ -182,161 +109,19 @@ var exports, required;
       });
     },
 
-    ajax: function (options, onEventError) {
-      /*
-        this functions performs an asynchronous http(s) request with error handling and timeout,
-        and passes the responseText to onEventError
-      */
-      var chunkList,
-        finished,
-        mode,
-        onEventError2,
-        redirect,
-        request,
-        response,
-        responseText,
-        timeout,
-        urlParsed;
-      mode = 0;
-      onEventError2 = function (error, data) {
-        mode = error instanceof Error ? -1 : mode + 1;
-        switch (mode) {
-        case 1:
-          /* clear old timeout */
-          clearTimeout(timeout);
-          /* set timeout */
-          timeout = exports.onEventTimeout(
-            onEventError2,
-            state.timeoutDefault,
-            'ajax ' + options.url
-          );
-          /* parse options.url */
-          urlParsed = required.url.parse(options.url);
-          /* deep-copy object */
-          options = JSON.parse(JSON.stringify(options));
-          /* bug - disable socket pooling, because it causes timeout errors in tls tests */
-          options.agent = options.agent || false;
-          /* host needed for redirects */
-          options.host = urlParsed.host;
-          /* hostname needed for http(s).request */
-          options.hostname = urlParsed.hostname;
-          /* path needed for http(s).request */
-          options.path = urlParsed.path;
-          /* port needed for http(s).request */
-          options.port = urlParsed.port;
-          /* protocol needed for http(s).request */
-          options.protocol = urlParsed.protocol;
-          /* init headers */
-          options.headers = options.headers || {};
-          /* init Content-Length header */
-          options.headers['Content-Length'] =
-            options.data ? Buffer.byteLength(options.data) : 0;
-          request = (options.protocol === 'https:' ? required.https : required.http)
-            .request(options, onEventError2);
-          /* send request and / or data */
-          request.end(options.data);
-          break;
-        case 2:
-          response = error;
-          /* follow redirects */
-          switch (response.statusCode) {
-          case 301:
-          case 302:
-          case 303:
-          case 304:
-          case 305:
-          case 306:
-          case 307:
-            mode = -2;
-            redirect = true;
-            onEventError2();
-            return;
-          }
-          chunkList = [];
-          response
-            .on('end', function () {
-              onEventError2(null, Buffer.concat(chunkList).toString());
-            })
-            /* error handling */
-            .on('error', onEventError2)
-            /* data handling */
-            .on('data', function (chunk) {
-              chunkList.push(chunk);
-            });
-          break;
-        case 3:
-          /* stringify responseText */
-          responseText = data;
-          /* error handling for http status code >= 400 */
-          if (response.statusCode >= 400) {
-            onEventError2(new Error(responseText));
-            return;
-          }
-          /* successful response */
-          onEventError2(null, responseText, response);
-          break;
-        default:
-          /* clear timeout */
-          clearTimeout(timeout);
-          /* garbage collect request socket */
-          if (request) {
-            request.destroy();
-          }
-          /* garbage collect response socket */
-          if (response) {
-            response.destroy();
-          }
-          if (!finished) {
-            finished = true;
-            if (error) {
-              /* add http method / status / url debug info to error.message */
-              error.message = options.method + ' ' + (response && response.statusCode) + ' - ' +
-                options.url + '\n' +
-                JSON.stringify((responseText || '').slice(0, 256) + '...') + '\n' +
-                error.message;
-              onEventError(error, responseText, response);
-            }
-            if (redirect) {
-              options.redirected = options.redirected || 8;
-              options.redirected -= 1;
-              if (options.redirected < 0) {
-                onEventError2(new Error('ajax - too many http redirects to ' +
-                  response.headers.location));
-                return;
-              }
-              options.url = response.headers.location;
-              if (options.url && options.url[0] === '/') {
-                options.url = options.protocol + '//' + options.host + options.url;
-              }
-              exports.ajax(options, onEventError);
-              return;
-            }
-            try {
-              /* try to call onEventError with responseText */
-              onEventError(null, responseText, response);
-            } catch (error2) {
-              /* else call onEventError with caught error */
-              onEventError(error2, responseText, response);
-            }
-          }
-        }
-      };
-      onEventError2();
-    },
-
     assert: function (passed, message) {
       /*
         this function throws an error if the assertion fails
       */
       if (!passed) {
         throw new Error('assertion error - ' + (
-          /* if message is an Error object, then get its stack trace */
-          message instanceof Error ? exports.errorStack(message)
           /* if message is a string, then leave it as is */
-          : typeof message === 'string' ? message
+          typeof message === 'string' ? message
+          /* if message is an Error object, then get its stack trace */
+          : message instanceof Error ? exports.errorStack(message)
               /* else JSON.stringify message */
               : JSON.stringify(message)
-        ) || 'undefined');
+        ));
       }
     },
 
@@ -348,10 +133,12 @@ var exports, required;
       exports.assert(true, true);
       /* test assertion failed */
       exports.testTryCatch(function () {
-        exports.assert(false, undefined);
+        exports.assert(false);
       }, function (error) {
         /* assert error occurred */
         exports.assert(error instanceof Error, error);
+        /* validate error message */
+        exports.assert(error.message === 'assertion error - undefined', error.message);
       });
       /* test assertion failed with text message */
       exports.testTryCatch(function () {
@@ -359,6 +146,11 @@ var exports, required;
       }, function (error) {
         /* assert error occurred */
         exports.assert(error instanceof Error, error);
+        /* validate error message */
+        exports.assert(
+          error.message === 'assertion error - _assert_default_test',
+          error.message
+        );
       });
       /* test assertion failed with error object */
       exports.testTryCatch(function () {
@@ -366,6 +158,8 @@ var exports, required;
       }, function (error) {
         /* assert error occurred */
         exports.assert(error instanceof Error, error);
+        /* validate error message */
+        exports.assert(error.message.indexOf('assertion error - Error') === 0, error.message);
       });
       onEventError();
     },
@@ -554,243 +348,6 @@ var exports, required;
       return value === undefined ? 'null' : value;
     },
 
-    fileActionDict_install: function (options) {
-      /*
-        this function installs the file
-      */
-      if (module === require.main && state.modeCli === 'npmInstall') {
-        required.fs.writeFileSync(options.file, options.content);
-      }
-    },
-
-    fileActionDict_trim: function (options) {
-      /*
-        this function trims the file content
-      */
-      options.content = options.content.trim();
-    },
-
-    modeCliDict_coverageReportBadgeCreate: function () {
-      /*
-        this function creates a coverage badge
-      */
-      var percent;
-      percent = (/Statements: <span class="metric">([.\d]+)/)
-        .exec(required.fs.readFileSync('.build/coverage-report/index.html', 'utf8'))[1];
-      required.fs.writeFileSync(
-        '.build/coverage-report/coverage-report.badge.svg',
-        state.fileDict[
-          'https%3A%2F%2Fimg.shields.io%2Fbadge%2Fcoverage-100.0%25-00dd00.svg%3Fstyle%3Dflat'
-        ]
-          .content
-          /* edit coverage badge percent */
-          .replace('100.0', percent)
-          /* edit coverage badge color */
-          .replace(
-            '0d0',
-            ('0' + Math.round((100 - Number(percent)) * 2.21).toString(16))
-              .slice(-2) +
-              ('0' + Math.round(Number(percent) * 2.21).toString(16)).slice(-2) +
-              '00'
-          )
-      );
-    },
-
-    _modeCliDict_coverageReportBadgeCreate_default_test: function (onEventError) {
-      /*
-        this function tests modeCliDict_coverageReportBadgeCreate's default handling behavior
-      */
-      exports.testMock(onEventError, [
-        [required, { fs: {
-          readFileSync: function () {
-            return 'Statements: <span class="metric">50.0%';
-          },
-          writeFileSync: exports.nop
-        } }]
-      ], function (onEventError) {
-        local.modeCliDict_coverageReportBadgeCreate();
-        onEventError();
-      });
-    },
-
-    modeCliDict_githubContentsFilePush: function (argv, onEventError) {
-      /*
-        this function pushes the local file1 to the remote github file2
-      */
-      var blob, file1, file2, mode, onEventError2, sha;
-      mode = 0;
-      onEventError2 = function (error, data) {
-        mode += 1;
-        switch (mode) {
-        case 1:
-          file1 = argv[3];
-          file2 = file1.replace(argv[4], argv[5]);
-          console.log('pushing file https://' +
-            process.env.GITHUB_REPO.replace('/', '.github.io/') + '-data/' + file2);
-          exports.ajax({
-            headers: {
-              authorization: 'token ' + process.env.GITHUB_TOKEN,
-              /* bug - github api requires user-agent header */
-              'user-agent': 'unknown'
-            },
-            url: 'https://api.github.com/repos/' + process.env.GITHUB_REPO +
-              '-data/contents/' + required.path.dirname(file2)
-          }, onEventError2);
-          break;
-        case 2:
-          blob = required.fs.readFileSync(file1);
-          data = JSON.parse(data);
-          if (Array.isArray(data)) {
-            /* calculate blob sha */
-            sha = required.crypto.createHash('sha1')
-              .update('blob ' + blob.length + '\x00')
-              .update(blob)
-              .digest('hex');
-            data.forEach(function (dict) {
-              if (dict.path === file2) {
-                /* no need to update if blob sha matches */
-                if (dict.sha === sha) {
-                  process.exit();
-                }
-                sha = dict.sha;
-              }
-            });
-          }
-          data = JSON.stringify({
-            content: blob.toString('base64'),
-            message: '[skip ci] update file ' + file2,
-            sha: sha
-          });
-          exports.ajax({
-            data: data,
-            headers: {
-              authorization: 'token ' + process.env.GITHUB_TOKEN,
-              'content-length': data.length,
-              /* bug - github api requires user-agent header */
-              'user-agent': 'unknown'
-            },
-            method: 'PUT',
-            url: 'https://api.github.com/repos/' + process.env.GITHUB_REPO +
-              '-data/contents/' + file2
-          }, onEventError2);
-          break;
-        default:
-          onEventError(error);
-          process.exit(!!error);
-        }
-      };
-      onEventError2();
-    },
-
-    _modeCliDict_githubContentsFilePush_default_test: function (onEventError) {
-      /*
-        this function tests modeCliDict_githubContentsFilePush's default handling behavior
-      */
-      var ajax1, mode;
-      exports.testMock(onEventError, [
-        [console, { error: exports.nop }],
-        [exports, { ajax: function (_, onEventError) {
-          exports.nop(_);
-          mode += 1;
-          switch (mode) {
-          case 1:
-            ajax1(onEventError);
-            break;
-          case 2:
-            onEventError();
-            break;
-          }
-        } }],
-        [required, {
-          fs: { readFileSync: function () {
-            return new Buffer(0);
-          } }
-        }],
-        [process, { argv: [null, null, null, 'aa/cc', 'aa', 'bb'] }]
-      ], function (onEventError) {
-        /* test file create handling behavior */
-        mode = 0;
-        ajax1 = function (onEventError) {
-          /* test file create handling behavior */
-          onEventError(null, '{}');
-        };
-        local.modeCliDict_githubContentsFilePush(process.argv, function (error) {
-          exports.testTryCatch(function () {
-            /* assert no error occurred */
-            exports.assert(!error, error);
-          }, onEventError);
-        });
-        /* test file update handling behavior */
-        mode = 0;
-        ajax1 = function (onEventError) {
-          onEventError(null, JSON.stringify([
-            /* test blob path mismatch handling behavior */
-            {},
-            /* test blob sha match handling behavior */
-            /* test file update handling behavior */
-            { path: 'bb/cc', sha: 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391' },
-            /* test blob sha mismatch handling behavior */
-            { path: 'bb/cc' }
-          ]));
-        };
-        local.modeCliDict_githubContentsFilePush(process.argv, function (error) {
-          exports.testTryCatch(function () {
-            /* assert no error occurred */
-            exports.assert(!error, error);
-          }, onEventError);
-        });
-        onEventError();
-      });
-    },
-
-    modeCliDict_npmTest: function () {
-      /*
-        this function runs npm test
-      */
-      var remaining, testPlatform;
-      if (module !== require.main) {
-        return;
-      }
-      testPlatform = state.testReport.testPlatformList[0];
-      remaining = testPlatform.testCaseList.length;
-      /* start global test timer */
-      testPlatform.totalTime = Date.now();
-      testPlatform.testCaseList.forEach(function (testCase) {
-        var errorFinished, finished, onEventError;
-        onEventError = function (error) {
-          exports.onEventErrorDefault(error);
-          /* save test error */
-          testCase.errorMessage = testCase.errorMessage || exports.errorStack(error);
-          /* error - multiple callbacks in test case */
-          if (finished) {
-            errorFinished = new Error('testCase ' + testCase.name + ' called multiple times');
-            exports.onEventErrorDefault(errorFinished);
-            /* save test error */
-            testCase.errorMessage = testCase.errorMessage || exports.errorStack(errorFinished);
-            return;
-          }
-          finished = true;
-          /* save test time */
-          testCase.time = Date.now() - testCase.time;
-          /* decrement test counter */
-          remaining -= 1;
-          /* create test report when all tests have finished */
-          if (remaining === 0) {
-            /* stop global test timer */
-            testPlatform.totalTime = Date.now() - testPlatform.totalTime;
-            local._testReportCreate(state.testReport);
-          }
-        };
-        testCase.time = Date.now();
-        /* run test case in try-catch block */
-        try {
-          testCase.callback(onEventError);
-        } catch (error) {
-          onEventError(error);
-        }
-      });
-    },
-
     nop: function () {
       /*
         this function performs no operation (nop)
@@ -802,7 +359,10 @@ var exports, required;
       /*
         this function tests nop's default handling behavior
       */
-      exports.nop();
+      var data;
+      data = exports.nop();
+      /* validate data */
+      exports.assert(data === undefined, data);
       onEventError();
     },
 
@@ -1040,63 +600,32 @@ var exports, required;
       });
     },
 
-    _testReportCreate: function (testReport) {
+    _testReportCreate: function (testReport, env) {
       /*
         this function creates a test report after all tests have finished
       */
-      var result;
+      var errorMessageList, result, testCaseNumber;
+      /* parse testReport */
+      exports.testReportMerge(testReport, {});
+      /* create test report summary */
+      result = '';
       testReport.testPlatformList.forEach(function (testPlatform) {
-        testPlatform.testCaseList.forEach(function (testCase) {
-          if (testCase.error) {
-            testPlatform.testsFailed += 1;
-          } else {
-            testPlatform.testsPassed += 1;
-          }
-        });
-        result = '\n\n\ntest report\n';
-        result += ('        ' + testPlatform.totalTime).slice(-8) + ' ms | ' +
-            (' ' + testPlatform.testsFailed).slice(-2) + ' failed | ' +
-            ('  ' + testPlatform.testsPassed).slice(-3) + ' passed\n';
-        console.log(result);
+        result += '\n\ntest report\n' +
+          ('        ' + testPlatform.time).slice(-8) + ' ms | ' +
+          (' ' + testPlatform.testsFailed).slice(-2) + ' failed | ' +
+          ('  ' + testPlatform.testsPassed).slice(-3) + ' passed\n';
+      });
+      /* print test report summary */
+      console.log(result);
+      if (state.modeNodejs) {
         /* create json test report */
-        required.fs.writeFileSync(
-          '.build/test-report.json',
-          JSON.stringify(testReport, null, 2)
-        );
-        /* create html test report */
-        required.fs.writeFileSync(
-          '.build/test-report.html',
-          local._testReportCreateHtml(testReport, process.env)
-        );
-        /* non-zero exit if tests failed */
-        if (testPlatform.testsFailed > 0) {
-          process.exit(1);
-        }
-      });
-    },
-
-    __testReportCreate_default_test: function (onEventError) {
-      /*
-        this function tests _testReportCreate's default handling behavior
-      */
-      exports.testMock(onEventError, [
-      ], function (onEventError) {
-        /* test tests passed handling behavior */
-        local._testReportCreate({ testPlatformList: [{ testCaseList: [] }] });
-        /* test tests failed handling behavior */
-        local._testReportCreate({ testPlatformList: [{ testCaseList: [{ error: state.errorDefault }], testsFailed: 0 }] });
-        onEventError();
-      });
-    },
-
-    _testReportCreateHtml: function (testReport, env) {
-      /*
-        this function creates an html test report
-      */
-      var errorMessageList, testCaseNumber;
+        required.fs.writeFileSync('.build/test-report.json', JSON.stringify(testReport));
+      }
+      /* create html test report */
       testCaseNumber = 0;
-      testReport = JSON.parse(JSON.stringify(exports.testReportMerge(testReport, {})));
-      return exports.textFormat(
+      /* copy testReport before modifying it */
+      testReport = JSON.parse(JSON.stringify(testReport, {}));
+      result = exports.textFormat(
         state.fileDict['/public/testReport.html.template'].content,
         exports.setOverride(testReport, {
           CI_BUILD_NUMBER: env.CI_BUILD_NUMBER,
@@ -1135,7 +664,31 @@ var exports, required;
             : 'testReportTestPassed'
         })
       );
+      if (state.modeNodejs) {
+        /* create html test report */
+        required.fs.writeFileSync('.build/test-report.html', result);
+        /* non-zero exit if tests failed */
+        if (testReport.testsFailed > 0) {
+          process.exit(1);
+        }
+      }
+      /* return html test report */
+      return result;
     },
+
+    // __testReportCreate_default_test: function (onEventError) {
+      // /*
+        // this function tests _testReportCreate's default handling behavior
+      // */
+      // exports.testMock(onEventError, [
+      // ], function (onEventError) {
+        // /* test tests passed handling behavior */
+        // local._testReportCreate({ testPlatformList: [{ testCaseList: [] }] });
+        // /* test tests failed handling behavior */
+        // local._testReportCreate({ testPlatformList: [{ testCaseList: [{ error: state.errorDefault }], testsFailed: 0 }] });
+        // onEventError();
+      // });
+    // },
 
     testReportMerge: function (testReport1, testReport2) {
       /*
@@ -1145,9 +698,10 @@ var exports, required;
       [testReport1, testReport2].forEach(function (testReport, ii) {
         ii += 1;
         exports.setDefault(testReport, {
+          date: new Date().toISOString(),
           errorMessageList: [],
           testPlatformList: [],
-          totalTime: 0
+          time: 0
         });
         /* security - handle malformed testReport */
         exports.assert(
@@ -1155,8 +709,8 @@ var exports, required;
           ii + ' invalid testReport ' + typeof testReport
         );
         exports.assert(
-          typeof testReport.totalTime === 'number',
-          ii + ' invalid testReport.totalTime ' + typeof testReport.totalTime
+          typeof testReport.time === 'number',
+          ii + ' invalid testReport.time ' + typeof testReport.time
         );
         /* security - handle malformed testReport.errorMessageList */
         testReport.errorMessageList.forEach(function (errorMessage) {
@@ -1170,24 +724,34 @@ var exports, required;
           exports.setDefault(testPlatform, {
             name: 'undefined',
             testCaseList: [],
-            totalTime: 0
+            time: 0
           });
           exports.assert(
             typeof testPlatform.name === 'string',
             ii + ' invalid testPlatform.name ' + typeof testPlatform.name
           );
           exports.assert(
-            typeof testPlatform.totalTime === 'number',
-            ii + ' invalid testPlatform.totalTime ' + typeof testPlatform.totalTime
+            typeof testPlatform.time === 'number',
+            ii + ' invalid testPlatform.time ' + typeof testPlatform.time
           );
           /* security - handle malformed testReport.testPlatformList.testCaseList */
           testPlatform.testCaseList.forEach(function (testCase) {
             exports.setDefault(testCase, {
-              name: 'undefined'
+              errorMessage: '',
+              name: 'undefined',
+              time: 0
             });
+            exports.assert(
+              typeof testCase.errorMessage === 'string',
+              ii + ' invalid testCase.errorMessage ' + typeof testCase.errorMessage
+            );
             exports.assert(
               typeof testCase.name === 'string',
               ii + ' invalid testCase.name ' + typeof testCase.name
+            );
+            exports.assert(
+              typeof testCase.time === 'number',
+              ii + ' invalid testCase.time ' + typeof testCase.time
             );
           });
         });
@@ -1207,21 +771,25 @@ var exports, required;
         });
         /* create new testPlatform1 */
         if (!testPlatform1) {
-          testPlatform1 = JSON.parse(JSON.copy(testPlatform2));
+          testPlatform1 = {
+            name: testPlatform2.name,
+            testCaseList: [],
+            time: 0
+          };
           testReport1.testPlatformList.push(testPlatform1);
         }
-        /* merge testPlatform2 into testPlatform1 */
-        testPlatform1.totalTime += testPlatform2.totalTime;
+        /* update testPlatform1.time */
+        if (testPlatform1.time < 0xffffffff) {
+          testPlatform1.time += testPlatform2.time;
+        }
         /* merge testPlatform2.testCaseList into testPlatform1.testCaseList */
         testPlatform2.testCaseList.forEach(function (testCase) {
           testPlatform1.testCaseList.push(testCase);
         });
       });
-      /* update date */
-      testReport1.date = testReport1.date || new Date().toISOString();
-      /* update totalTime */
-      if (testReport1.totalTime < 0xffffffff) {
-        testReport1.totalTime += Number(testReport2.totalTime) || 0;
+      /* update testReport1.time */
+      if (testReport1.time < 0xffffffff) {
+        testReport1.time += testReport2.time;
       }
       testReport1.platformsFailed = 0;
       testReport1.platformsPassed = 0;
@@ -1233,24 +801,20 @@ var exports, required;
         testPlatform1.testsFailed = 0;
         testPlatform1.testsPassed = 0;
         testPlatform1.testCaseList.forEach(function (testCase) {
-          /* security - fix potentially malformed testCase */
-          testCase.errorMessage = String(testCase.errorMessage || '');
-          testCase.name = String(testCase.name);
-          testCase.time = Number(testCase.time) || 0;
-          /* update tests failed */
+          /* update failed tests */
           if (testCase.errorMessage) {
             testCase.status = 'failed';
             testReport1.testsFailed += 1;
             testPlatform1.testsFailed += 1;
             testPlatform1.status = 'failed';
-          /* update tests pending */
+          /* update pending tests */
           } else if (testCase.time > 0xffffffff) {
             testCase.status = 'pending';
             testReport1.testsPending += 1;
             if (testPlatform1.status !== 'failed') {
               testPlatform1.status = 'pending';
             }
-          /* update tests passed */
+          /* update passed tests */
           } else {
             testCase.status = 'passed';
             testReport1.testsPassed += 1;
@@ -1269,18 +833,63 @@ var exports, required;
         }
         /* sort testCaseList by status.name */
         testPlatform1.testCaseList.sort(function (arg1, arg2) {
-          arg1 = String(arg1.status.replace('passed', 'z') + arg1.name).toLowerCase();
-          arg2 = String(arg2.status.replace('passed', 'z') + arg2.name).toLowerCase();
+          arg1 = arg1.status.replace('passed', 'z') + arg1.name.toLowerCase();
+          arg2 = arg2.status.replace('passed', 'z') + arg2.name.toLowerCase();
           return arg1 <= arg2 ? -1 : 1;
         });
       });
       /* sort testPlatformList by status.name */
       testReport1.testPlatformList.sort(function (arg1, arg2) {
-        arg1 = String(arg1.status.replace('passed', 'z') + arg1.name).toLowerCase();
-        arg2 = String(arg2.status.replace('passed', 'z') + arg2.name).toLowerCase();
+        arg1 = arg1.status.replace('passed', 'z') + arg1.name.toLowerCase();
+        arg2 = arg2.status.replace('passed', 'z') + arg2.name.toLowerCase();
         return arg1 <= arg2 ? -1 : 1;
       });
       return testReport1;
+    },
+
+    testRun: function (testReport) {
+      /*
+        this function runs the tests
+      */
+      var remaining, testPlatform;
+      testPlatform = testReport.testPlatformList[0];
+      remaining = testPlatform.testCaseList.length;
+      /* start testPlatform timer */
+      testPlatform.time = Date.now();
+      testPlatform.testCaseList.forEach(function (testCase) {
+        var errorFinished, finished, onEventError;
+        onEventError = function (error) {
+          exports.onEventErrorDefault(error);
+          /* save test error */
+          testCase.errorMessage = testCase.errorMessage || exports.errorStack(error);
+          /* error - multiple callbacks in test case */
+          if (finished) {
+            errorFinished = new Error('testCase ' + testCase.name + ' called multiple times');
+            exports.onEventErrorDefault(errorFinished);
+            /* save test error */
+            testCase.errorMessage = testCase.errorMessage || exports.errorStack(errorFinished);
+            return;
+          }
+          finished = true;
+          /* save test time */
+          testCase.time = Date.now() - testCase.time;
+          /* decrement test counter */
+          remaining -= 1;
+          /* create test report when all tests have finished */
+          if (remaining === 0) {
+            /* stop testPlatform timer */
+            testPlatform.time = Date.now() - testPlatform.time;
+            local._testReportCreate(testReport, process.env);
+          }
+        };
+        testCase.time = Date.now();
+        /* run test case in try-catch block */
+        try {
+          testCase.callback(onEventError);
+        } catch (error) {
+          onEventError(error);
+        }
+      });
     },
 
     testTryCatch: function (callback, onEventError) {
@@ -1310,13 +919,6 @@ var exports, required;
       });
       onEventError();
     },
-
-    /* ascii character reference */
-    textExampleAscii: '\x00\x01\x02\x03\x04\x05\x06\x07\b\t\n\x0b\f\r\x0e\x0f'
-      + '\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f'
-      + ' !"#$%&\'()*+,-./0123456789:;<=>?'
-      + '@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_'
-      + '`abcdefghijklmnopqrstuvwxyz{|}~\x7f',
 
     textFormat: function (template, dict) {
       /*
@@ -1407,9 +1009,30 @@ var exports, required;
       /*
         this function tests textWordwrap's default handling behavior
       */
-      exports.textWordwrap(exports.textExampleAscii, 80).split('\n').forEach(function (line) {
-        /* assert line is 80 characters or less */
-        exports.assert(line.length <= 80, line.length);
+      var data;
+      data = exports.textWordwrap(state.textExampleAscii, 16);
+      /* validate data */
+      exports.assert(data ===
+        "\x00\x01\x02\x03\x04\x05\x06\x07\b\t\n" +
+        "\x0b\f\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\\\n" +
+        "        \x1a\x1b\x1c\x1d\x1e\x1f \\\n" +
+        "        !\"#$%&'\\\n" +
+        "        ()*+,-.\\\n" +
+        "        /012345\\\n" +
+        "        6789:;<\\\n" +
+        "        =>?@ABC\\\n" +
+        "        DEFGHIJ\\\n" +
+        "        KLMNOPQ\\\n" +
+        "        RSTUVWX\\\n" +
+        "        YZ[\\]^_\\\n" +
+        "        `abcdef\\\n" +
+        "        ghijklm\\\n" +
+        "        nopqrst\\\n" +
+        "        uvwxyz{\\\n" +
+        "        |}~\x7f", JSON.stringify(data));
+      data.split('\n').forEach(function (line) {
+        /* assert line is 16 characters or less */
+        exports.assert(line.length <= 16, line.length);
       });
       onEventError();
     }
@@ -1420,64 +1043,465 @@ var exports, required;
 
 
 
-(function moduleProxyNodejs() {
+(function subModuleBuildNodejs() {
   /*
-    this nodejs module exports the proxy api
+    this nodejs sub-module exports the build api
   */
   'use strict';
   var local = {
-    _name: 'proxy.moduleProxyNodejs',
+    _name: 'build.subModuleBuildNodejs',
 
     _init: function () {
-      /*
-        this function inits the module
-      */
+      if (!state.modeNodejs) {
+        return;
+      }
       /* init local object */
       exports.initLocal(local);
+      /* init required object */
+      global.required = global.required || {};
+      [
+        'crypto',
+        'fs',
+        'http', 'https',
+        'path',
+        'url',
+        'vm'
+      ].forEach(function (module) {
+        required[module] = required[module] || require(module);
+      });
       /* init cli */
       local._initCli(process.argv);
+      /* init builtin files */
+      local._initFile();
     },
 
     _initCli: function (argv) {
       /*
-        this function inits the cli
+        this function parses commandline arguments and integrates it into the state dict
       */
-      if (module === require.main && !state.modeCli) {
-        /* lint files */
-        argv.slice(2).forEach(function (file) {
-          /* if error, exit with non-zero exit-code */
-          if (!exports.jslint(required.fs.readFileSync(file, 'utf8'), file)) {
-            process.exit(1);
-          }
-        });
+      var callback, value;
+      if (__dirname !== process.cwd()) {
+        return;
       }
+      /* parse argv */
+      argv.forEach(function (arg) {
+        if (arg.indexOf('--') === 0) {
+          arg = arg.split('=');
+          /* --foo=1 -> state.foo = 1 */
+          value = arg.slice(1).join('=') ||
+            /* --foo -> state.foo = true */
+            true;
+          /* convert arg to camel case */
+          arg = arg[0].slice(2).replace((/[\-_][a-z]/g), function (match) {
+            return match[1].toUpperCase();
+          });
+          try {
+            state[arg] = JSON.parse(value);
+          } catch (error) {
+            state[arg] = value;
+          }
+        }
+      });
+      /* init cli */
+      setTimeout(function () {
+        callback = state.modeCliDict[state.modeCli];
+        if (callback) {
+          callback(argv, exports.onEventErrorDefault);
+        }
+      });
     },
 
     __initCli_default_test: function (onEventError) {
       /*
         this function tests _initCli's default handling behavior
       */
-      var message;
+      var data;
       exports.testMock(onEventError, [
-        [console, { error: function (_) {
-          message += _;
-        } }],
-        [global, { state: { modeCliDict: null } }],
-        [require, { main: module }],
-        [required, { fs: { readFileSync: exports.echo } }]
+        [global, {
+          process: { cwd: exports.nop },
+          state: { modeCliDict: {} }
+        }]
       ], function (onEventError) {
-        /* test jslint passed handling behavior */
-        message = '';
-        local._initCli(['', '', 'var aa = 1;']);
-        /* assert no error occurred */
-        exports.assert(message === '', message);
-        /* test jslint failed handling behavior */
-        message = '';
-        local._initCli(['', '', 'syntax error']);
-        /* assert error occurred */
-        exports.assert(message, message);
+        /* test nop handling behavior */
+        local._initCli();
+        data = exports.jsonStringifyOrdered(state);
+        /* validate state */
+        exports.assert(data === '{"modeCliDict":{}}', data);
+        /* test default handling behavior */
+        process.cwd = function () {
+          return __dirname;
+        };
+        local._initCli(['aa', '--bb', '--cc=dd']);
+        data = exports.jsonStringifyOrdered(state);
+        /* validate state */
+        exports.assert(data === '{"bb":true,"cc":"dd","modeCliDict":{}}', data);
         onEventError();
       });
+    },
+
+    _initFile: function () {
+      /*
+        this function inits builtin files
+      */
+      var data;
+      data = required.fs.readFileSync('build.data', 'utf8');
+      data.replace(
+        (/^\/\* MODULE_BEGIN (.+) \*\/$([\S\s]+?)^\/\* MODULE_END \*\/$/gm),
+        function (_, options, content, ii) {
+          exports.nop(_);
+          options = JSON.parse(options);
+          /* save options to state.fileDict */
+          state.fileDict[options.file] = options;
+          /* preserve lineno */
+          options.content = data.slice(0, ii).replace(/.*/g, '') + content;
+          /* run actions */
+          options.actionList.forEach(function (action) {
+            state.fileActionDict[action](options);
+          });
+        }
+      );
+    },
+
+    ajax: function (options, onEventError) {
+      /*
+        this functions performs an asynchronous http(s) request with error handling and timeout,
+        and passes the responseText to onEventError
+      */
+      var chunkList,
+        finished,
+        mode,
+        onEventError2,
+        redirect,
+        request,
+        response,
+        responseText,
+        timeout,
+        urlParsed;
+      mode = 0;
+      onEventError2 = function (error, data) {
+        mode = error instanceof Error ? -1 : mode + 1;
+        switch (mode) {
+        case 1:
+          /* clear old timeout */
+          clearTimeout(timeout);
+          /* set timeout */
+          timeout = exports.onEventTimeout(
+            onEventError2,
+            state.timeoutDefault,
+            'ajax ' + options.url
+          );
+          /* parse options.url */
+          urlParsed = required.url.parse(options.url);
+          /* deep-copy object */
+          options = JSON.parse(JSON.stringify(options));
+          /* bug - disable socket pooling, because it causes timeout errors in tls tests */
+          options.agent = options.agent || false;
+          /* host needed for redirects */
+          options.host = urlParsed.host;
+          /* hostname needed for http(s).request */
+          options.hostname = urlParsed.hostname;
+          /* path needed for http(s).request */
+          options.path = urlParsed.path;
+          /* port needed for http(s).request */
+          options.port = urlParsed.port;
+          /* protocol needed for http(s).request */
+          options.protocol = urlParsed.protocol;
+          /* init headers */
+          options.headers = options.headers || {};
+          /* init Content-Length header */
+          options.headers['Content-Length'] =
+            options.data ? Buffer.byteLength(options.data) : 0;
+          request = (options.protocol === 'https:' ? required.https : required.http)
+            .request(options, onEventError2);
+          /* send request and / or data */
+          request.end(options.data);
+          break;
+        case 2:
+          response = error;
+          /* follow redirects */
+          switch (response.statusCode) {
+          case 301:
+          case 302:
+          case 303:
+          case 304:
+          case 305:
+          case 306:
+          case 307:
+            mode = -2;
+            redirect = true;
+            onEventError2();
+            return;
+          }
+          chunkList = [];
+          response
+            .on('end', function () {
+              onEventError2(null, Buffer.concat(chunkList).toString());
+            })
+            /* error handling */
+            .on('error', onEventError2)
+            /* data handling */
+            .on('data', function (chunk) {
+              chunkList.push(chunk);
+            });
+          break;
+        case 3:
+          /* stringify responseText */
+          responseText = data;
+          /* error handling for http status code >= 400 */
+          if (response.statusCode >= 400) {
+            onEventError2(new Error(responseText));
+            return;
+          }
+          /* successful response */
+          onEventError2(null, responseText, response);
+          break;
+        default:
+          /* clear timeout */
+          clearTimeout(timeout);
+          /* garbage collect request socket */
+          if (request) {
+            request.destroy();
+          }
+          /* garbage collect response socket */
+          if (response) {
+            response.destroy();
+          }
+          if (!finished) {
+            finished = true;
+            if (error) {
+              /* add http method / status / url debug info to error.message */
+              error.message = options.method + ' ' + (response && response.statusCode) + ' - ' +
+                options.url + '\n' +
+                JSON.stringify((responseText || '').slice(0, 256) + '...') + '\n' +
+                error.message;
+              onEventError(error, responseText, response);
+            }
+            if (redirect) {
+              options.redirected = options.redirected || 8;
+              options.redirected -= 1;
+              if (options.redirected < 0) {
+                onEventError2(new Error('ajax - too many http redirects to ' +
+                  response.headers.location));
+                return;
+              }
+              options.url = response.headers.location;
+              if (options.url && options.url[0] === '/') {
+                options.url = options.protocol + '//' + options.host + options.url;
+              }
+              exports.ajax(options, onEventError);
+              return;
+            }
+            try {
+              /* try to call onEventError with responseText */
+              onEventError(null, responseText, response);
+            } catch (error2) {
+              /* else call onEventError with caught error */
+              onEventError(error2, responseText, response);
+            }
+          }
+        }
+      };
+      onEventError2();
+    },
+
+    fileActionDict_install: function (options) {
+      /*
+        this function installs the file
+      */
+      if (__dirname !== process.cwd()) {
+        return;
+      }
+      required.fs.writeFileSync(options.file, options.content);
+    },
+
+    fileActionDict_trim: function (options) {
+      /*
+        this function trims the file content
+      */
+      options.content = options.content.trim();
+    },
+
+    modeCliDict_coverageReportBadgeCreate: function () {
+      /*
+        this function creates a coverage badge
+      */
+      var percent;
+      percent = (/Statements: <span class="metric">([.\d]+)/)
+        .exec(required.fs.readFileSync('.build/coverage-report/index.html', 'utf8'))[1];
+      required.fs.writeFileSync(
+        '.build/coverage-report/coverage-report.badge.svg',
+        state.fileDict[
+          'https%3A%2F%2Fimg.shields.io%2Fbadge%2Fcoverage-100.0%25-00dd00.svg%3Fstyle%3Dflat'
+        ]
+          .content
+          /* edit coverage badge percent */
+          .replace('100.0', percent)
+          /* edit coverage badge color */
+          .replace(
+            '0d0',
+            ('0' + Math.round((100 - Number(percent)) * 2.21).toString(16))
+              .slice(-2) +
+              ('0' + Math.round(Number(percent) * 2.21).toString(16)).slice(-2) +
+              '00'
+          )
+      );
+    },
+
+    _modeCliDict_coverageReportBadgeCreate_default_test: function (onEventError) {
+      /*
+        this function tests modeCliDict_coverageReportBadgeCreate's default handling behavior
+      */
+      exports.testMock(onEventError, [
+        [required, { fs: {
+          readFileSync: function () {
+            return 'Statements: <span class="metric">50.0%';
+          },
+          writeFileSync: exports.nop
+        } }]
+      ], function (onEventError) {
+        local.modeCliDict_coverageReportBadgeCreate();
+        onEventError();
+      });
+    },
+
+    modeCliDict_githubContentsFilePush: function (argv, onEventError) {
+      /*
+        this function pushes the local file1 to the remote github file2
+      */
+      var blob, file1, file2, mode, onEventError2, sha;
+      mode = 0;
+      onEventError2 = function (error, data) {
+        mode += 1;
+        switch (mode) {
+        case 1:
+          file1 = argv[3];
+          file2 = file1.replace(argv[4], argv[5]);
+          console.log('pushing file https://' +
+            process.env.GITHUB_REPO.replace('/', '.github.io/') + '-data/' + file2);
+          exports.ajax({
+            headers: {
+              authorization: 'token ' + process.env.GITHUB_TOKEN,
+              /* bug - github api requires user-agent header */
+              'user-agent': 'unknown'
+            },
+            url: 'https://api.github.com/repos/' + process.env.GITHUB_REPO +
+              '-data/contents/' + required.path.dirname(file2)
+          }, onEventError2);
+          break;
+        case 2:
+          blob = required.fs.readFileSync(file1);
+          data = JSON.parse(data);
+          if (Array.isArray(data)) {
+            /* calculate blob sha */
+            sha = required.crypto.createHash('sha1')
+              .update('blob ' + blob.length + '\x00')
+              .update(blob)
+              .digest('hex');
+            data.forEach(function (dict) {
+              if (dict.path === file2) {
+                /* no need to update if blob sha matches */
+                if (dict.sha === sha) {
+                  process.exit();
+                }
+                sha = dict.sha;
+              }
+            });
+          }
+          data = JSON.stringify({
+            content: blob.toString('base64'),
+            message: '[skip ci] update file ' + file2,
+            sha: sha
+          });
+          exports.ajax({
+            data: data,
+            headers: {
+              authorization: 'token ' + process.env.GITHUB_TOKEN,
+              'content-length': data.length,
+              /* bug - github api requires user-agent header */
+              'user-agent': 'unknown'
+            },
+            method: 'PUT',
+            url: 'https://api.github.com/repos/' + process.env.GITHUB_REPO +
+              '-data/contents/' + file2
+          }, onEventError2);
+          break;
+        default:
+          onEventError(error);
+          process.exit(!!error);
+        }
+      };
+      onEventError2();
+    },
+
+    _modeCliDict_githubContentsFilePush_default_test: function (onEventError) {
+      /*
+        this function tests modeCliDict_githubContentsFilePush's default handling behavior
+      */
+      var ajax1, mode;
+      exports.testMock(onEventError, [
+        [console, { error: exports.nop }],
+        [exports, { ajax: function (_, onEventError) {
+          exports.nop(_);
+          mode += 1;
+          switch (mode) {
+          case 1:
+            ajax1(onEventError);
+            break;
+          case 2:
+            onEventError();
+            break;
+          }
+        } }],
+        [required, {
+          fs: { readFileSync: function () {
+            return new Buffer(0);
+          } }
+        }],
+        [process, { argv: [null, null, null, 'aa/cc', 'aa', 'bb'] }]
+      ], function (onEventError) {
+        /* test file create handling behavior */
+        mode = 0;
+        ajax1 = function (onEventError) {
+          /* test file create handling behavior */
+          onEventError(null, '{}');
+        };
+        local.modeCliDict_githubContentsFilePush(process.argv, function (error) {
+          exports.testTryCatch(function () {
+            /* assert no error occurred */
+            exports.assert(!error, error);
+          }, onEventError);
+        });
+        /* test file update handling behavior */
+        mode = 0;
+        ajax1 = function (onEventError) {
+          onEventError(null, JSON.stringify([
+            /* test blob path mismatch handling behavior */
+            {},
+            /* test blob sha match handling behavior */
+            /* test file update handling behavior */
+            { path: 'bb/cc', sha: 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391' },
+            /* test blob sha mismatch handling behavior */
+            { path: 'bb/cc' }
+          ]));
+        };
+        local.modeCliDict_githubContentsFilePush(process.argv, function (error) {
+          exports.testTryCatch(function () {
+            /* assert no error occurred */
+            exports.assert(!error, error);
+          }, onEventError);
+        });
+        onEventError();
+      });
+    },
+
+    modeCliDict_npmTest: function () {
+      /*
+        this function runs npm test
+      */
+      if (__dirname !== process.cwd()) {
+        return;
+      }
+      exports.testRun(state.testReport);
     }
 
   };

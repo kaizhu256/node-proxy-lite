@@ -15,7 +15,7 @@
   denyCurrentBranch = warn
 [remote "origin"]
   fetch = +refs/heads/*:refs/remotes/origin/*
-  url = git@github.com:kaizhu256/node-proxy.git
+  url = git@github.com:kaizhu256/node-proxy-lite.git
 /* MODULE_END */
 
 
@@ -149,17 +149,17 @@ tr:nth-child(odd).testReportPlatformTr {
 <table class="testReportPlatformTable">
 <thead><tr>
   <th>total time</th>
-  <th>total tests failed</th>
-  <th>total tests passed</th>
   <th>platforms failed</th>
   <th>platforms passed</th>
+  <th>total tests failed</th>
+  <th>total tests passed</th>
 </tr></thead>
 <tbody><tr>
-  <td>{{totalTime}} ms</td>
-  <td class="{{testsFailedClass}}">{{testsFailed}}</td>
-  <td class="testReportTestPassed">{{testsPassed}}</td>
+  <td>{{time}} ms</td>
   <td class="{{testsFailedClass}}">{{platformsFailed}}</td>
   <td class="testReportTestPassed">{{platformsPassed}}</td>
+  <td class="{{testsFailedClass}}">{{testsFailed}}</td>
+  <td class="testReportTestPassed">{{testsPassed}}</td>
 </tr></tbody>
 </table>
 </div>
@@ -168,7 +168,7 @@ tr:nth-child(odd).testReportPlatformTr {
 <div class="testReportPlatformDiv">
 <h4>
   {{testPlatformNumber}}. {{name}}<br>
-  <span class="testReportPlatformSpan">total time</span>- {{totalTime}} ms<br>
+  <span class="testReportPlatformSpan">total time</span>- {{time}} ms<br>
   <span class="testReportPlatformSpan">tests failed</span>- {{testsFailed}}<br>
   <span class="testReportPlatformSpan">tests passed</span>- {{testsPassed}}<br>
 </h4>

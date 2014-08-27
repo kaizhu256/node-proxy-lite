@@ -57,9 +57,9 @@ tr:nth-child(odd).testReportPlatformTr {
 <div class="testReportPlatformDiv testReportSummaryDiv">
 <h2>proxy-lite test-report summary</h2>
 <h4>
-  <span class="testReportSummarySpan">build date</span>- 2014-08-27T09:24:02.320Z<br>
-  <span class="testReportSummarySpan">build id</span>- 44<br>
-  <span class="testReportSummarySpan">commit info</span>- 3b7c38d2c9dd639ddbcaffdb391e542130870d8f - debug build<br>
+  <span class="testReportSummarySpan">build date</span>- 2014-08-27T09:34:20.024Z<br>
+  <span class="testReportSummarySpan">build id</span>- 45<br>
+  <span class="testReportSummarySpan">commit info</span>- ee1a5bfb179bbd91a5c239918e40f9a9c4e99a73 - add true proxy capability<br>
 </h4>
 <table class="testReportPlatformTable">
 <thead><tr>
@@ -69,18 +69,362 @@ tr:nth-child(odd).testReportPlatformTr {
   <th>total tests pending</th>
 </tr></thead>
 <tbody><tr>
-  <td>12 ms</td>
-  <td class="testReportTestPassed">0</td>
-  <td>18</td>
+  <td>97177 ms</td>
+  <td class="testReportTestFailed">2</td>
+  <td>148</td>
   <td>0</td>
 </tr></tbody>
 </table>
 </div>
 
 <div class="testReportPlatformDiv">
-
+<a class="testReportPlatformScreenshotA" href="test-report.screenshot.travis.png"><img class="testReportPlatformScreenshotImg" src="test-report.screenshot.travis.png"></a>
 <h4>
-  1. npmTestLocal - nodejs - linux v0.10.31<br>
+  1. saucelabsTest - browser - saucelabs osx 10.9 safari 7<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 0 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 1<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>1</td>
+  <td>0 ms</td>
+  <td class="testReportTestFailed">failed</td>
+  <td>__saucelabsTest_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPre">
+
+1. __saucelabsTest_default_test
+Error: {"url":"https://saucelabs.com/jobs/72df0826ca3b46b7977736da8df30930","platform":["osx 10\
+        .9","safari","7"],"result":null,"id":"896c9f8375a0488fb6c33da11e43754e","job_id":"72df0\
+        826ca3b46b7977736da8df30930"}
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:112958)
+    at Object.local._saucelabsMerge (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9\
+        :115404)
+    at /home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:111498
+    at Array.forEach (native)
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:110937)
+    at /home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:48619
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:82590)
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:81035)
+    at IncomingMessage.&lt;anonymous> (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:\
+        107027)
+    at IncomingMessage.emit (events.js:117:20)
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="test-report.screenshot.travis.png"><img class="testReportPlatformScreenshotImg" src="test-report.screenshot.travis.png"></a>
+<h4>
+  2. saucelabsTest - nodejs - linux v0.10.31<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 97175 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 1<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>2</td>
+  <td>97175 ms</td>
+  <td class="testReportTestFailed">failed</td>
+  <td>utility2.submoduleUtility2Nodejs.__saucelabsTest_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPre">
+
+2. utility2.submoduleUtility2Nodejs.__saucelabsTest_default_test
+Error: {"url":"https://saucelabs.com/jobs/72df0826ca3b46b7977736da8df30930","platform":["osx 10\
+        .9","safari","7"],"result":null,"id":"896c9f8375a0488fb6c33da11e43754e","job_id":"72df0\
+        826ca3b46b7977736da8df30930"}
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:112958)
+    at Object.local._saucelabsMerge (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9\
+        :115404)
+    at /home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:111498
+    at Array.forEach (native)
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:110937)
+    at /home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:48619
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:82590)
+    at onEventIo (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:81035)
+    at IncomingMessage.&lt;anonymous> (/home/travis/build/kaizhu256/node-proxy-lite/utility2.js:9:\
+        107027)
+    at IncomingMessage.emit (events.js:117:20)
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="test-report.screenshot.phantomjs.png"><img class="testReportPlatformScreenshotImg" src="test-report.screenshot.phantomjs.png"></a>
+<h4>
+  3. npmTestLocal - browser - Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.7 Safari/534.34<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2008 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>3</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>4</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>5</td>
+  <td>65 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>6</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>7</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>8</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>9</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>10</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>11</td>
+  <td>2000 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>12</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>13</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>14</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>15</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>16</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="test-report.screenshot.slimerjs.png"><img class="testReportPlatformScreenshotImg" src="test-report.screenshot.slimerjs.png"></a>
+<h4>
+  4. npmTestLocal - browser - Mozilla/5.0 (X11; Linux x86_64; rv:25.0) Gecko/20100101 SlimerJS/0.9.1<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2007 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>17</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>18</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>19</td>
+  <td>55 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>20</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>21</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>22</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>23</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>24</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>25</td>
+  <td>2001 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>26</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>27</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>28</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>29</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>30</td>
+  <td>2 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="test-report.screenshot.travis.png"><img class="testReportPlatformScreenshotImg" src="test-report.screenshot.travis.png"></a>
+<h4>
+  5. npmTestLocal - nodejs - linux v0.10.31<br>
   <span class="testReportPlatformSpan">time elapsed</span>- 0 ms<br>
   <span class="testReportPlatformSpan">tests failed</span>- 0<br>
   <span class="testReportPlatformSpan">tests passed</span>- 18<br>
@@ -96,127 +440,1016 @@ tr:nth-child(odd).testReportPlatformTr {
 <tbody>
 
 <tr class="testReportPlatformTr">
-  <td>1</td>
+  <td>31</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Nodejs.__initReplEval_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>2</td>
+  <td>32</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Nodejs.__phantomjsTest_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>3</td>
+  <td>33</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Nodejs._initFile_watchFile_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>4</td>
+  <td>34</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Nodejs._modeCliDict_coverageReportBadgeCreate_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>5</td>
+  <td>35</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Nodejs._modeCliDict_githubContentsFilePush_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>6</td>
+  <td>36</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>7</td>
+  <td>37</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>8</td>
+  <td>38</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._assert_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>9</td>
+  <td>39</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._callX_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>10</td>
+  <td>40</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>11</td>
+  <td>41</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>12</td>
+  <td>42</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>13</td>
+  <td>43</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>14</td>
+  <td>44</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>15</td>
+  <td>45</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>16</td>
+  <td>46</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>17</td>
+  <td>47</td>
   <td>0 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
 </tr>
 
 <tr class="testReportPlatformTr">
-  <td>18</td>
+  <td>48</td>
   <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="test-report.screenshot.travis.png"><img class="testReportPlatformScreenshotImg" src="test-report.screenshot.travis.png"></a>
+<h4>
+  6. saucelabsScreenshot - nodejs - linux v0.10.31<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 0 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 18<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>49</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Nodejs.__initReplEval_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>50</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Nodejs.__phantomjsTest_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>51</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Nodejs._initFile_watchFile_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>52</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Nodejs._modeCliDict_coverageReportBadgeCreate_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>53</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Nodejs._modeCliDict_githubContentsFilePush_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>54</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>55</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>56</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>57</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>58</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>59</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>60</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>61</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>62</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>63</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>64</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>65</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>66</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="https://assets.saucelabs.com/jobs/dad4549da3e046fb8cffd45eaa71604c/0003screenshot.png"><img class="testReportPlatformScreenshotImg" src="https://assets.saucelabs.com/jobs/dad4549da3e046fb8cffd45eaa71604c/0003screenshot.png"></a>
+<h4>
+  7. saucelabsTest - browser - Mozilla/5.0 (iPad; CPU OS 7_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D167 Safari/9537.53<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2005 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>67</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>68</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>69</td>
+  <td>109 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>70</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>71</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>72</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>73</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>74</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>75</td>
+  <td>2001 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>76</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>77</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>78</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>79</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>80</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="https://assets.saucelabs.com/jobs/c0e262f2a7054d33b22fd203d3338c79/0003screenshot.png"><img class="testReportPlatformScreenshotImg" src="https://assets.saucelabs.com/jobs/c0e262f2a7054d33b22fd203d3338c79/0003screenshot.png"></a>
+<h4>
+  8. saucelabsTest - browser - Mozilla/5.0 (iPhone; CPU iPhone OS 7_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D167 Safari/9537.53<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2012 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>81</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>82</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>83</td>
+  <td>188 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>84</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>85</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>86</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>87</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>88</td>
+  <td>2 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>89</td>
+  <td>2000 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>90</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>91</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>92</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>93</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>94</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="https://assets.saucelabs.com/jobs/8c643cf30a90439dae85c106126a54b9/0003screenshot.png"><img class="testReportPlatformScreenshotImg" src="https://assets.saucelabs.com/jobs/8c643cf30a90439dae85c106126a54b9/0003screenshot.png"></a>
+<h4>
+  9. saucelabsTest - browser - Mozilla/5.0 (Linux; U; Android 4.3; en-us; Android SDK built for x86 Build/JSS15J) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2033 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>95</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>96</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>97</td>
+  <td>97 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>98</td>
+  <td>3 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>99</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>100</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>101</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>102</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>103</td>
+  <td>2020 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>104</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>105</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>106</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>107</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>108</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="https://assets.saucelabs.com/jobs/cbd48453947a49ccb82b7af8da559ef6/0003screenshot.png"><img class="testReportPlatformScreenshotImg" src="https://assets.saucelabs.com/jobs/cbd48453947a49ccb82b7af8da559ef6/0003screenshot.png"></a>
+<h4>
+  10. saucelabsTest - browser - Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; rv:11.0) like Gecko<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2018 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>109</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>110</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>111</td>
+  <td>81 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>112</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>113</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>114</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>115</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>116</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>117</td>
+  <td>2013 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>118</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>119</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>120</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>121</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>122</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="https://assets.saucelabs.com/jobs/b2f06363eff54be0aee1985203db15bf/0003screenshot.png"><img class="testReportPlatformScreenshotImg" src="https://assets.saucelabs.com/jobs/b2f06363eff54be0aee1985203db15bf/0003screenshot.png"></a>
+<h4>
+  11. saucelabsTest - browser - Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2013 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>123</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>124</td>
+  <td>2 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>125</td>
+  <td>85 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>126</td>
+  <td>4 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>127</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>128</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>129</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>130</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>131</td>
+  <td>2001 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>132</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>133</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>134</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>135</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>136</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
+</tr>
+
+</tbody>
+</table>
+<pre class="testReportPlatformPreHidden">
+
+</pre>
+</div>
+
+<div class="testReportPlatformDiv">
+<a class="testReportPlatformScreenshotA" href="https://assets.saucelabs.com/jobs/2b6883978fdb4ff782cfbd679dac98cf/0003screenshot.png"><img class="testReportPlatformScreenshotImg" src="https://assets.saucelabs.com/jobs/2b6883978fdb4ff782cfbd679dac98cf/0003screenshot.png"></a>
+<h4>
+  12. saucelabsTest - browser - Mozilla/5.0 (X11; Linux i686; rv:29.0) Gecko/20100101 Firefox/29.0<br>
+  <span class="testReportPlatformSpan">time elapsed</span>- 2009 ms<br>
+  <span class="testReportPlatformSpan">tests failed</span>- 0<br>
+  <span class="testReportPlatformSpan">tests passed</span>- 14<br>
+  <span class="testReportPlatformSpan">tests pending</span>- 0<br>
+</h4>
+<table class="testReportPlatformTable">
+<thead><tr>
+  <th>#</th>
+  <th>time elapsed</th>
+  <th>status</th>
+  <th>test case</th>
+</tr></thead>
+<tbody>
+
+<tr class="testReportPlatformTr">
+  <td>137</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Browser.__initAjax_noAjaxProgressBar_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>138</td>
+  <td>4 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared.__debug_print_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>139</td>
+  <td>130 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._ajax_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>140</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._assert_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>141</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._callX_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>142</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._initSubmodule_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>143</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._jsonStringifyOrdered_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>144</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventErrorDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>145</td>
+  <td>2001 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._onEventTimeout_timeout_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>146</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setDefault_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>147</td>
+  <td>1 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._setOverride_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>148</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testMock_error_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>149</td>
+  <td>0 ms</td>
+  <td class="testReportTestPassed">passed</td>
+  <td>utility2.submoduleUtility2Shared._testTryCatch_default_test</td>
+</tr>
+
+<tr class="testReportPlatformTr">
+  <td>150</td>
+  <td>2 ms</td>
   <td class="testReportTestPassed">passed</td>
   <td>utility2.submoduleUtility2Shared._textFormat_default_test</td>
 </tr>

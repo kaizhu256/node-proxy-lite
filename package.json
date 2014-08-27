@@ -1,23 +1,28 @@
 {
-  "bin": { "proxy-lite": "node-proxy-lite.js" },
+  "bin": { "proxy-lite": "main.js" },
   "contributors": [{ "name": "kai zhu", "email": "kaizhu256@gmail.com" }],
   "description": "lightweight nodejs proxy server with no external dependencies",
   "devDependencies": {
     "istanbul": "0.2.x",
-    "jslint-lite": "2014.x.x"
+    "jslint-lite": "2014.x.x",
+    "phantomjs": "1.9.x",
+    "slimerjs": "0.9.x"
   },
   "engines": { "node": ">=0.10.x" },
-  "main": "node-proxy-lite.js",
+  "license": "MIT",
+  "main": "main.js",
   "name": "proxy-lite",
   "os": ["darwin", "linux"],
+  "repoGithub": "kaizhu256/node-proxy-lite",
+  "repoHeroku": "hrku01-proxy-lite",
   "repository" : {
     "type" : "git",
     "url" : "https://github.com/kaizhu256/node-proxy-lite.git"
   },
   "scripts": {
-    "install": "./utility.sh shNpmInstall",
-    "start": "./utility.sh shNpmStart",
-    "test": "./utility.sh shNpmTest"
+    "install": "./utility2.sh shNpmInstall",
+    "start": "./utility2.sh shNpmStart",
+    "test": "./utility2.sh shNpmTest"
   },
-  "version": "2014.7.2-14"
+  "version": "2014.8.27-10"
 }
